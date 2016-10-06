@@ -60,8 +60,10 @@ func main() {
 	err = cmd.Run()
 	e.Print(err)
 
-	if waitStatus, ok := cmd.ProcessState.Sys().(syscall.WaitStatus); ok {
-		exitCode = waitStatus.ExitStatus()
+	if cmd.ProcessState != nil {
+		if waitStatus, ok := cmd.ProcessState.Sys().(syscall.WaitStatus); ok {
+			exitCode = waitStatus.ExitStatus()
+		}
 	}
 	signals <- syscall.SIGTERM
 	runtime.Goexit()
