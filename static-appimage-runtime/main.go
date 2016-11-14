@@ -12,11 +12,14 @@ import (
 
 	"github.com/hanwen/go-fuse/fuse/nodefs"
 	"github.com/hanwen/go-fuse/zipfs"
+	"github.com/kardianos/osext"
 	"github.com/orivej/e"
 )
 
 func main() {
-	files, err := zipfs.NewZipTree(os.Args[0])
+	executable, err := osext.Executable()
+	e.Exit(err)
+	files, err := zipfs.NewZipTree(executable)
 	e.Exit(err)
 
 	mfs := zipfs.NewMemTreeFs(files)
