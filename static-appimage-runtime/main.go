@@ -56,10 +56,13 @@ func main() {
 	err = server.WaitMount()
 	e.Exit(err)
 
-	cmd := exec.Command(path.Join(mnt, "AppRun"), os.Args[1:]...) // #nosec
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
+	cmd := exec.Cmd{
+		Path:   path.Join(mnt, "AppRun"),
+		Args:   os.Args,
+		Stdin:  os.Stdin,
+		Stdout: os.Stdout,
+		Stderr: os.Stderr,
+	}
 	err = cmd.Run()
 	if cmd.ProcessState != nil {
 		if waitStatus, ok := cmd.ProcessState.Sys().(syscall.WaitStatus); ok {
