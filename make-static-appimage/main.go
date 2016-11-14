@@ -31,9 +31,12 @@ func main() {
 	e.Exit(err)
 	dst, err := os.OpenFile(dstPath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0777)
 	e.Exit(err)
+	defer e.CloseOrExit(dst)
 	_, err = io.Copy(dst, runtimeFile)
 	e.Exit(err)
 	e.CloseOrExit(runtimeFile)
+	_, err = dst.WriteAt([]byte{0x41, 0x49, 0x02}, 8) // AppImage type 2 magic
+	e.Exit(err)
 
 	zipOffset, err := dst.Seek(0, io.SeekCurrent)
 	e.Exit(err)
