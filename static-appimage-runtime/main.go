@@ -61,13 +61,14 @@ func main() {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err = cmd.Run()
-	e.Print(err)
-
 	if cmd.ProcessState != nil {
 		if waitStatus, ok := cmd.ProcessState.Sys().(syscall.WaitStatus); ok {
 			exitCode = waitStatus.ExitStatus()
+			err = nil
 		}
 	}
+	e.Print(err)
+
 	signals <- syscall.SIGTERM
 	runtime.Goexit()
 }
