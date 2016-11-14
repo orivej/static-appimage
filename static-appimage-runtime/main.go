@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"os/signal"
+	"path"
 	"runtime"
 	"syscall"
 	"time"
@@ -55,8 +56,7 @@ func main() {
 	err = server.WaitMount()
 	e.Exit(err)
 
-	cmd := exec.Command("./AppRun", os.Args[1:]...) // #nosec
-	cmd.Dir = mnt
+	cmd := exec.Command(path.Join(mnt, "AppRun"), os.Args[1:]...) // #nosec
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
