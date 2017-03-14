@@ -12,6 +12,7 @@ import (
 )
 
 const runtime = "static-appimage-runtime"
+const ioSeekCurrent = 1 // For compatibility with Go 1.6
 
 func main() {
 	log.SetFlags(0)
@@ -38,7 +39,7 @@ func main() {
 	_, err = dst.WriteAt([]byte{0x41, 0x49, 0x02}, 8) // AppImage type 2 magic
 	e.Exit(err)
 
-	zipOffset, err := dst.Seek(0, io.SeekCurrent)
+	zipOffset, err := dst.Seek(0, ioSeekCurrent)
 	e.Exit(err)
 
 	zipWriter := zip.NewWriter(dst)
