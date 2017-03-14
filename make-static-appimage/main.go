@@ -55,11 +55,10 @@ func main() {
 		relpath, err := filepath.Rel(appdir, path)
 		e.Exit(err)
 
-		zipHeader := &zip.FileHeader{
-			Name:   relpath,
-			Method: zip.Deflate,
-		}
-		zipHeader.SetMode(fi.Mode())
+		zipHeader, err := zip.FileInfoHeader(fi)
+		e.Exit(err)
+		zipHeader.Name = relpath
+		zipHeader.Method = zip.Deflate
 
 		w, err := zipWriter.CreateHeader(zipHeader)
 		e.Exit(err)
